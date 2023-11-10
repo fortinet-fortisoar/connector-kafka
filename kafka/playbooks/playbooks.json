@@ -1,0 +1,227 @@
+{
+  "type": "workflow_collections",
+  "data": [
+    {
+      "uuid": "5cb4e18a-3349-4470-8976-0a35a7d7bce2",
+      "@type": "WorkflowCollection",
+      "workflows": [
+        {
+          "@type": "Workflow",
+          "uuid": "37aa9a4b-1d91-4161-b64a-68d43f730067",
+          "collection": "/api/3/workflow_collections/5cb4e18a-3349-4470-8976-0a35a7d7bce2",
+          "steps": [
+            {
+              "uuid": "3b32a50b-fa2d-4c33-87b3-76f34d19a353",
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "step_variables": {
+                  "input": {
+                    "params": []
+                  }
+                }
+              },
+              "left": "20",
+              "top": "20",
+              "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62"
+            },
+            {
+              "uuid": "f5ba3c38-9f92-4b25-9a13-e2f26cbbbd2d",
+              "@type": "WorkflowStep",
+              "name": "Kafka Topic List",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "name": "Kafka",
+                "config": "''",
+                "params": [],
+                "version": "1.0.0",
+                "connector": "kafka",
+                "operation": "topic_list",
+                "operationTitle": "Kafka Topic List"
+              },
+              "left": "188",
+              "top": "120",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671"
+            }
+          ],
+          "triggerLimit": null,
+          "description": "Query Kafka for Topics",
+          "name": "Kafka Topic List",
+          "tag": "#Kafka",
+          "recordTags": [
+            "Kafka",
+            "kafka"
+          ],
+          "isActive": false,
+          "debug": false,
+          "singleRecordExecution": false,
+          "parameters": [],
+          "synchronous": false,
+          "triggerStep": "/api/3/workflow_steps/3b32a50b-fa2d-4c33-87b3-76f34d19a353",
+          "routes": [
+            {
+              "uuid": "85357872-a389-4625-97d0-1b6b4f96f7de",
+              "@type": "WorkflowRoute",
+              "label": null,
+              "isExecuted": false,
+              "name": "Start-> Kafka Topic List",
+              "sourceStep": "/api/3/workflow_steps/3b32a50b-fa2d-4c33-87b3-76f34d19a353",
+              "targetStep": "/api/3/workflow_steps/f5ba3c38-9f92-4b25-9a13-e2f26cbbbd2d"
+            }
+          ]
+        },
+        {
+          "@type": "Workflow",
+          "uuid": "2f8c8d44-93b1-40c8-8e78-652130a4a73c",
+          "collection": "/api/3/workflow_collections/5cb4e18a-3349-4470-8976-0a35a7d7bce2",
+          "steps": [
+            {
+              "uuid": "1035699d-b2db-4d9a-856b-135b5b7829e6",
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "step_variables": {
+                  "input": {
+                    "params": []
+                  }
+                }
+              },
+              "left": "20",
+              "top": "20",
+              "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62"
+            },
+            {
+              "uuid": "9398c06d-2c16-4ceb-b09b-9a2395d5e9e3",
+              "@type": "WorkflowStep",
+              "name": "Kafka Topic Details",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "name": "Kafka",
+                "config": "''",
+                "params": {
+                  "topic": ""
+                },
+                "version": "1.0.0",
+                "connector": "kafka",
+                "operation": "topic_details",
+                "operationTitle": "Kafka Topic Details"
+              },
+              "left": "188",
+              "top": "120",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671"
+            }
+          ],
+          "triggerLimit": null,
+          "description": "Get details of topic from Kafka",
+          "name": "Kafka Topic Details",
+          "tag": "#Kafka",
+          "recordTags": [
+            "Kafka",
+            "kafka"
+          ],
+          "isActive": false,
+          "debug": false,
+          "singleRecordExecution": false,
+          "parameters": [],
+          "synchronous": false,
+          "triggerStep": "/api/3/workflow_steps/1035699d-b2db-4d9a-856b-135b5b7829e6",
+          "routes": [
+            {
+              "uuid": "6d85bb78-ab63-4ab2-a6c6-65398c7c17c5",
+              "@type": "WorkflowRoute",
+              "label": null,
+              "isExecuted": false,
+              "name": "Start-> Kafka Topic Details",
+              "sourceStep": "/api/3/workflow_steps/1035699d-b2db-4d9a-856b-135b5b7829e6",
+              "targetStep": "/api/3/workflow_steps/9398c06d-2c16-4ceb-b09b-9a2395d5e9e3"
+            }
+          ]
+        },
+        {
+          "@type": "Workflow",
+          "uuid": "712342da-c770-4c4e-b1e2-5d3b4a348a54",
+          "collection": "/api/3/workflow_collections/5cb4e18a-3349-4470-8976-0a35a7d7bce2",
+          "steps": [
+            {
+              "uuid": "d1b3cc2f-42d8-47f2-9ed4-f4f850431205",
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "step_variables": {
+                  "input": {
+                    "params": []
+                  }
+                }
+              },
+              "left": "20",
+              "top": "20",
+              "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62"
+            },
+            {
+              "uuid": "3bb8f186-c503-4158-855a-2cc115a19bdc",
+              "@type": "WorkflowStep",
+              "name": "Publish Message to a Topic",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "name": "Kafka",
+                "config": "''",
+                "params": {
+                  "topic": "",
+                  "message": ""
+                },
+                "version": "1.0.0",
+                "connector": "kafka",
+                "operation": "post_topic",
+                "operationTitle": "Publish Message to a Topic"
+              },
+              "left": "188",
+              "top": "120",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671"
+            }
+          ],
+          "triggerLimit": null,
+          "description": "Publish Message to a Topic in Kafka",
+          "name": "Publish Message to a Topic",
+          "tag": "#Kafka",
+          "recordTags": [
+            "Kafka",
+            "kafka"
+          ],
+          "isActive": false,
+          "debug": false,
+          "singleRecordExecution": false,
+          "parameters": [],
+          "synchronous": false,
+          "triggerStep": "/api/3/workflow_steps/d1b3cc2f-42d8-47f2-9ed4-f4f850431205",
+          "routes": [
+            {
+              "uuid": "07d2cd0e-7c66-4ca3-8338-56adb78f4d19",
+              "@type": "WorkflowRoute",
+              "label": null,
+              "isExecuted": false,
+              "name": "Start-> Publish Message to a Topic",
+              "sourceStep": "/api/3/workflow_steps/d1b3cc2f-42d8-47f2-9ed4-f4f850431205",
+              "targetStep": "/api/3/workflow_steps/3bb8f186-c503-4158-855a-2cc115a19bdc"
+            }
+          ]
+        }
+      ],
+      "name": "Sample - Kafka - 1.0.0",
+      "description": "Kafka Connector to publish/consume a messages to/from a topic.",
+      "visible": true,
+      "recordTags": [
+        "Kafka",
+        "kafka"
+      ]
+    }
+  ]
+}
