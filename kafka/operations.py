@@ -1,92 +1,212 @@
-"""
-Copyright start
-MIT License
-Copyright (c) 2023 Fortinet Inc
-Copyright end
-"""
-
+# %%
 from connectors.core.connector import get_logger, ConnectorError
-import requests, json, time
-from kafka import KafkaProducer, KafkaConsumer
+import json
+from base64 import b64decode, b64encode
+from kafka import KafkaProducer, KafkaConsumer, TopicPartition
+from kafka.producer.future import RecordMetadata
+from kafka.consumer.fetcher import ConsumerRecord
 
 
-logger = get_logger('kafka')
+logger = get_logger("kafka")
 
-def topic_list(config, params, *args, **kwargs):
+DEFAULT_ENCODING_CODEC = "utf-8"
 
-    server = "{}:{}".format(config.get('host'), config.get('port'))
-    consumer = KafkaConsumer(bootstrap_servers=server)
+
+class DannyJSONEncoder(json.JSONEncoder):
+    global DEFAULT_ENCODING_CODEC
+
+    def default(self, obj):
+        if isinstance(obj, bytes):
+            return obj.decode(DEFAULT_ENCODING_CODEC)
+        elif isinstance(obj, TopicPartition):
+            return obj._asdict()
+        elif isinstance(obj, RecordMetadata):
+            return obj._asdict()
+        return json.JSONEncoder.default(self, obj)
+
+
+def convert_item_to_value(item):
+    if isinstance(item, list):
+        return convert_list_to_jsonDict(item)
+
+    elif isinstance(item, dict):
+        return convert_dict_to_jsonDict(item)
+
+    elif isinstance(item, bytes):
+        return item.decode(DEFAULT_ENCODING_CODEC)
+
+    elif isinstance(item, TopicPartition):
+        return convert_dict_to_jsonDict(item._asdict())
+
+    elif isinstance(item, ConsumerRecord):
+        return convert_dict_to_jsonDict(item._asdict())
+
+    elif isinstance(item, RecordMetadata):
+        return convert_dict_to_jsonDict(item._asdict())
+
+    else:
+        return item
+
+
+def convert_list_to_jsonDict(_list: list) -> list:
+    retval = []
+    for _item in _list:
+        if isinstance(_item, list):
+            retval.append(convert_list_to_jsonDict(_item))
+
+        elif isinstance(_item, dict):
+            retval.append(convert_dict_to_jsonDict(_item))
+
+        else:
+            retval.append(convert_item_to_value(_item))
+
+    return retval
+
+
+def convert_dict_to_jsonDict(_dict: dict) -> dict:
+    for _key in _dict:
+        if isinstance(_dict[_key], list):
+            _dict[_key] = convert_list_to_jsonDict(_dict[_key])
+
+        elif isinstance(_dict[_key], dict):
+            _dict[_key] = convert_dict_to_jsonDict(_dict[_key])
+
+        else:
+            _dict[_key] = convert_item_to_value(_dict[_key])
+
+    return _dict
+
+
+def topic_list(config: dict, params: dict):
+    host = config.get("host")
+    port = config.get("port", "9092")
+
+    consumer = KafkaConsumer(bootstrap_servers=f"{host}:{port}")
 
     try:
         result = consumer.topics()
-        return result.json()
+        return list(result)
     except Exception as err:
-        logger.exception("Error getting topic list from Kafka. Error as follows: {}".format(str(err)))
-        raise ConnectorError("Error getting topic list from Kafka. Error as follows: {}".format(str(err)))
+        raise ConnectorError(f"{err}")
 
-def topic_details(config, params, *args, **kwargs):
 
-    server = "{}:{}".format(config.get('host'), config.get('port'))
-    consumer = KafkaConsumer(params.get('topics'), bootstrap_servers=server)
+def topic_details(config: dict, params: dict):
+    host = config.get("host")
+    port = config.get("port", "9092")
 
+    topics = params.get("topics")
+    poll_timeout_ms = params.get("poll_timeout_ms", 1000)
+    max_records = params.get("max_records", None)
+    seek_partition = params.get("seek_partition", list)
+
+    global DEFAULT_ENCODING_CODEC
+    DEFAULT_ENCODING_CODEC = params.get("msg_decode_codec", "utf-8")
+    # must be in the format [{"partition": "partition_name", "offset": 0}]
 
     try:
-        consumer.subscription()
+        consumer = KafkaConsumer(bootstrap_servers=f"{host}:{port}")
+        consumer.subscribe(topics)
         consumer.topics()
-        consumer.seek_to_beginning()
-        p = consumer.poll(timeout_ms=1000)
-        return p.json()
-    except Exception as err:
-        logger.exception("Error getting topic list from Kafka. Error as follows: {}".format(str(err)))
-        raise ConnectorError("Error getting topic list from Kafka. Error as follows: {}".format(str(err)))
 
-def post_topic(config, params, *args, **kwargs):
+        kafka_topic_result_list = []
+        if isinstance(seek_partition, list) and len(seek_partition) > 0:
+            assign_partition = []
+            for _seek_po in seek_partition:
+                partition = _seek_po.get("partition")
+                offset = _seek_po.get("offset", 0)
 
-    server = "{}:{}".format(config.get('host'), config.get('port'))
-    producer = KafkaProducer(bootstrap_servers=server)
-    topic_name = params.get('topic')
-    topic_message = json.dumps(params.get('message')).encode('utf-8')
+                for _assignment in consumer.assignment():
+                    if _assignment.partition == partition:
+                        assign_partition.append(
+                            {"partition": _assignment, "offset": offset}
+                        )
 
-    try:
-        m = producer.send(topic_name, topic_message)
-
-        i = 0
-        while not m.is_done:
-            logger.info("checking done attempt {0}".format(str(i)))
-            logger.info(m.is_done)
-            i += 1
-            time.sleep(2)
-
-        if m.is_done:
-            pass
-            return m.get().json()
-
-    except Exception as err:
-        logger.exception("Error posting data to Kafka. Error as follows: {}".format(str(err)))
-        raise ConnectorError("Error posting data to Kafka. Error as follows: {}".format(str(err)))
-
-
-def _check_health(config):
-
-    headers = {'Accept': 'application/vnd.kafka.v2+json'}
-    url = 'http://{}:{}'.format(config.get('host'), config.get('port'))
-
-    try:
-        result = requests.get(url, headers=headers)
-        if result.status_code == 200:
-            return True
+            for _partition in assign_partition:
+                consumer.seek(_partition.get("partition"), _partition.get("offset"))
+                kafka_topic_result_list.append(
+                    consumer.poll(poll_timeout_ms, max_records)
+                )
         else:
-            return result.json()
-            logger.exception("Error connecting to Kafka. Error as follows: {}".format(result.json()))
-            raise ConnectorError("Error connecting to Kafka. Error as follows: {}".format(result.json()))
+            consumer.seek_to_beginning()
+            kafka_topic_result_list.append(consumer.poll(poll_timeout_ms, max_records))
+
+        return convert_item_to_value(kafka_topic_result_list)
     except Exception as err:
-        logger.exception("Error connecting to Kafka. Error as follows: {}".format(str(err)))
-        raise ConnectorError("Error connecting to Kafka. Error as follows: {}".format(str(err)))
+        raise ConnectorError(f"{err}")
+
+
+def send_str_message_to_topic(config: dict, params: dict):
+    host = config.get("host")
+    port = config.get("port", "9092")
+
+    producer = KafkaProducer(bootstrap_servers=f"{host}:{port}")
+
+    topic = params.get("topic", "")
+    msg = params.get("message", "")
+    msg_encode_codec = params.get("msg_encode_codec", "utf-8")
+
+    try:
+        msg = producer.send(topic, msg.encode(msg_encode_codec))
+        return convert_item_to_value(msg.get())
+
+    except Exception as err:
+        raise ConnectorError(f"{err}")
+
+
+def send_b64encoded_message_to_topic(config: dict, params: dict):
+    host = config.get("host")
+    port = config.get("port", "9092")
+
+    producer = KafkaProducer(bootstrap_servers=f"{host}:{port}")
+
+    topic = params.get("topic", "")
+    base64_msg = params.get("base64msg", "")
+
+    try:
+        msg = producer.send(topic, b64decode(base64_msg))
+        return convert_item_to_value(msg.get())
+
+    except Exception as err:
+        raise ConnectorError(f"{err}")
+
+
+def _check_health(config: dict):
+    return topic_list(config, None)
 
 
 operations = {
-    'topic_list': topic_list,
-    'topic_details': topic_details,
-    'post_topic': post_topic
+    "topic_list": topic_list,
+    "topic_details": topic_details,
+    "send_str_message_to_topic": send_str_message_to_topic,
+    "send_b64encoded_message_to_topic": send_b64encoded_message_to_topic,
 }
 
+
+# %%
+# usage test!
+# config = {
+#     "host": "127.0.0.1",
+#     "port": "9092",
+# }
+# asd = _check_health(config)
+# topic_list(config, None)
+
+# params = {
+#     "topic": "topic1",
+#     "msg": "hello",
+#     "msg_encode_codec": "utf-8",
+#     "base64_msg": b64encode("hello".encode("utf-8")).decode("utf-8"),
+# }
+# send_str_message_to_topic(config, params)
+# send_b64encoded_message_to_topic(config, params)
+
+# params = {
+#     "topics": ["topic1", "my-topic"],
+#     "seek_partition": [
+#         {
+#             "partition": 1,
+#             "offset": 1,
+#         }
+#     ],
+# }
+# asd = topic_details(config, params)
