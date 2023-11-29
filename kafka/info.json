@@ -1,95 +1,155 @@
 {
   "name": "kafka",
-  "label": "Kafka",
   "version": "1.0.0",
-  "description": "Kafka Connector to publish/consume a messages to/from a topic.",
+  "label": "Kafka",
+  "description": "Kafka is an open-source distributed event streaming platform. This Kafka Connector is use to publish/consume a messages to/from a topic.",
   "publisher": "Fortinet",
-  "cs_approved": false,
-  "cs_compatible": true,
-  "category": "Communication",
   "icon_small_name": "small.png",
   "icon_large_name": "large.png",
   "configuration": {
     "fields": [
       {
         "title": "Hostname",
-        "description":"Hostname/URL to connect to Kafka.",
-        "required": true,
-        "editable": true,
-        "visible": true,
         "type": "text",
-        "name": "host"
+        "name": "host",
+        "required": true,
+        "visible": true,
+        "editable": true,
+        "description": "Specify the hostname to connect."
       },
       {
         "title": "Port",
-        "description":"Port number on which Kafka is running.",
-        "required": false,
-        "editable": true,
-        "visible": true,
         "type": "text",
-        "name": "port"
+        "name": "port",
+        "required": false,
+        "visible": true,
+        "editable": true,
+        "description": "Specify the port number to connect."
       }
     ]
   },
   "operations": [
     {
       "operation": "topic_list",
-      "title": "Kafka Topic List",
-      "description": "Query Kafka for Topics",
+      "title": "kafka topic list",
+      "description": "Retrieves all topics that are on the Kafka.",
       "enabled": true,
-      "output_schema": {
-      },
-      "parameters": []
+      "output_schema": {},
+      "parameters": [],
+      "open": false
     },
     {
       "operation": "topic_details",
-      "title": "Kafka Topic Details",
-      "description": "Get details of topic from Kafka",
+      "title": "kafka topic details",
+      "description": "Get details of topic(s) based on the topic names and other input parameters specified from Kafka",
       "enabled": true,
-      "output_schema": {
-      },
+      "output_schema": {},
       "parameters": [
         {
-          "title": "Topic Name",
-          "description":"The name of the Topic.",
+          "title": "Topic Names",
+          "type": "object",
+          "name": "topics",
           "required": true,
-          "editable": true,
           "visible": true,
-          "type": "text",
-          "name": "topic",
-          "value": ""
-        }
-      ]
-    },
-    {
-      "operation": "post_topic",
-      "title": "Publish Message to a Topic",
-      "description": "Publish Message to a Topic in Kafka",
-      "enabled": true,
-      "output_schema": {
-      },
-      "parameters": [
-        {
-          "title": "Topic Name",
-          "description":"The name of the Topic.",
-          "required": true,
           "editable": true,
-          "visible": true,
-          "type": "text",
-          "name": "topic",
-          "value": ""
+          "value": "",
+          "tooltip": "sample input: \n[\"topic1\", \"my-topic\"]",
+          "description": "Specify the topic names whose details you want to fetch."
         },
         {
-          "title": "Message to be Published.",
-          "description":"Messaged that need to be published to Topic",
-          "required": true,
-          "editable": true,
+          "title": "Poll Timeout in ms",
+          "type": "integer",
+          "name": "timeout_ms",
+          "required": false,
           "visible": true,
+          "editable": true,
+          "value": 1000,
+          "description": "Specify the Poll Timeout in ms"
+        },
+        {
+          "title": "Max Records",
+          "type": "integer",
+          "name": "max_records",
+          "required": true,
+          "visible": true,
+          "editable": true,
+          "value": "",
+          "description": "Specify the maximum records to fetch."
+        },
+        {
+          "title": "Seek Partition",
+          "type": "object",
+          "name": "seek_partition",
+          "tooltip": "sample input value: \n[\n\t{\n\t\t\"partition\": 1,\n\t\t\"offset\": 1,\n\t}\n]",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "value": "Specify the seek partition"
+        }
+      ],
+      "open": false
+    },
+    {
+      "title": "Send String Message to Topic",
+      "operation": "send_str_message_to_topic",
+      "description": "Publish Message to a Topic in Kafka",
+      "enabled": true,
+      "output_schema": {},
+      "parameters": [
+        {
+          "title": "Topic",
+          "type": "text",
+          "name": "topic",
+          "required": true,
+          "visible": true,
+          "editable": true,
+          "value": "",
+          "description": "Specify the topic to which you want to send the message"
+        },
+        {
+          "title": "Message",
           "type": "text",
           "name": "message",
-          "value": ""
+          "required": true,
+          "visible": true,
+          "editable": true,
+          "value": "",
+          "description": "Specify the message to send."
         }
-      ]
+      ],
+      "open": false
+    },
+    {
+      "title": "Send b64encoded Message to Topic",
+      "operation": "send_b64encoded_message_to_topic",
+      "description": "Publish Message to a Topic in Kafka The b64encoded message will be decoded to bytes",
+      "parameters": [
+        {
+          "title": "Topic",
+          "type": "text",
+          "name": "topic",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "value": "",
+          "description": "Specify the topic to which you want to send the message"
+        },
+        {
+          "title": "Base64 Message",
+          "type": "text",
+          "name": "base64msg",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "value": "",
+          "description": "Specify the message to send."
+        }
+      ],
+      "open": false
     }
-  ]
+  ],
+  "category": "Communication and Coordination",
+  "cs_approved": false,
+  "cs_compatible": true,
+  "help_online": "https://github.com/fortinet-fortisoar/connector-kafka/blob/release/1.0.0/docs/KafkaConnectorDoc.md"
 }
