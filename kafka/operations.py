@@ -1,3 +1,10 @@
+"""
+Copyright start
+MIT License
+Copyright (c) 2023 Fortinet Inc
+Copyright end
+"""
+
 # %%
 from connectors.core.connector import get_logger, ConnectorError
 import json
@@ -181,7 +188,7 @@ operations = {
     "send_b64encoded_message_to_topic": send_b64encoded_message_to_topic,
 }
 
-
+# For debugging purpose
 # %%
 # usage test!
 # config = {
