@@ -1,12 +1,11 @@
 {
   "name": "kafka",
-  "version": "2.0.2",
+  "version": "1.0.0",
   "label": "Kafka",
-  "description": "Kafka Connector to publish/consume a messages to/from a topic.",
-  "publisher": "",
+  "description": "Kafka is an open-source distributed event streaming platform. This Kafka Connector is use to publish/consume a messages to/from a topic.",
+  "publisher": "Fortinet",
   "icon_small_name": "small.png",
   "icon_large_name": "large.png",
-  "id": 247,
   "configuration": {
     "fields": [
       {
@@ -15,7 +14,8 @@
         "name": "host",
         "required": true,
         "visible": true,
-        "editable": true
+        "editable": true,
+        "description": "Specify the hostname to connect."
       },
       {
         "title": "Port",
@@ -23,7 +23,8 @@
         "name": "port",
         "required": false,
         "visible": true,
-        "editable": true
+        "editable": true,
+        "description": "Specify the port number to connect."
       }
     ]
   },
@@ -31,7 +32,7 @@
     {
       "operation": "topic_list",
       "title": "kafka topic list",
-      "description": "Query Kafka for Topics",
+      "description": "Retrieves all topics that are on the Kafka.",
       "enabled": true,
       "output_schema": {},
       "parameters": [],
@@ -40,7 +41,7 @@
     {
       "operation": "topic_details",
       "title": "kafka topic details",
-      "description": "Get details of topic from Kafka",
+      "description": "Get details of topic(s) based on the topic names and other input parameters specified from Kafka",
       "enabled": true,
       "output_schema": {},
       "parameters": [
@@ -52,7 +53,8 @@
           "visible": true,
           "editable": true,
           "value": "",
-          "tooltip": "sample input: \n[\"topic1\", \"my-topic\"]"
+          "tooltip": "sample input: \n[\"topic1\", \"my-topic\"]",
+          "description": "Specify the topic names whose details you want to fetch."
         },
         {
           "title": "Poll Timeout in ms",
@@ -61,32 +63,34 @@
           "required": false,
           "visible": true,
           "editable": true,
-          "value": 1000
+          "value": 1000,
+          "description": "Specify the Poll Timeout in ms"
         },
         {
-          "title": "max_records",
+          "title": "Max Records",
           "type": "integer",
           "name": "max_records",
           "required": true,
           "visible": true,
           "editable": true,
-          "value": ""
+          "value": "",
+          "description": "Specify the maximum records to fetch."
         },
         {
-          "title": "seek_partition",
+          "title": "Seek Partition",
           "type": "object",
           "name": "seek_partition",
           "tooltip": "sample input value: \n[\n\t{\n\t\t\"partition\": 1,\n\t\t\"offset\": 1,\n\t}\n]",
           "required": false,
           "visible": true,
           "editable": true,
-          "value": ""
+          "value": "Specify the seek partition"
         }
       ],
       "open": false
     },
     {
-      "title": "send str message to topic",
+      "title": "Send String Message to Topic",
       "operation": "send_str_message_to_topic",
       "description": "Publish Message to a Topic in Kafka",
       "enabled": true,
@@ -99,7 +103,8 @@
           "required": true,
           "visible": true,
           "editable": true,
-          "value": ""
+          "value": "",
+          "description": "Specify the topic to which you want to send the message"
         },
         {
           "title": "Message",
@@ -108,54 +113,43 @@
           "required": true,
           "visible": true,
           "editable": true,
-          "value": ""
+          "value": "",
+          "description": "Specify the message to send."
         }
       ],
       "open": false
     },
     {
-      "title": "send b64encoded message to topic",
+      "title": "Send b64encoded Message to Topic",
       "operation": "send_b64encoded_message_to_topic",
-      "description": "Publish Message to a Topic in Kafka\nThe b64encoded message will be decoded to bytes",
+      "description": "Publish Message to a Topic in Kafka The b64encoded message will be decoded to bytes",
       "parameters": [
         {
-          "title": "topic",
+          "title": "Topic",
           "type": "text",
           "name": "topic",
           "required": false,
           "visible": true,
           "editable": true,
-          "value": ""
+          "value": "",
+          "description": "Specify the topic to which you want to send the message"
         },
         {
-          "title": "base64_msg",
+          "title": "Base64 Message",
           "type": "text",
           "name": "base64msg",
           "required": false,
           "visible": true,
           "editable": true,
-          "value": ""
+          "value": "",
+          "description": "Specify the message to send."
         }
       ],
       "open": false
     }
   ],
-  "category": [
-    "Communication"
-  ],
-  "active": true,
+  "category": "Communication and Coordination",
+  "cs_approved": false,
   "cs_compatible": true,
-  "system": false,
-  "playbook_collections": [
-    {
-      "@id": "/api/3/workflow_collections/5cb4e18a-3349-4470-8976-0a35a7d7bce2",
-      "name": "Sample - Kafka - 1.0.0",
-      "image": "/api/3/images/8af5efe6-d7da-49ec-a2c3-5850127a886e",
-      "description": "Sample playbooks for \"Kafka\" connector. If you are planning to use any of the sample playbooks in your environment, ensure that you clone those playbooks and move them to a different collection, since the sample playbook collection gets deleted during connector upgrade and delete."
-    }
-  ],
-  "icon_small": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQwIDc5LjE2MDQ1MSwgMjAxNy8wNS8wNi0wMTowODoyMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1MDNhYTZiMy0zYzEzLTQ5YzEtODNiZi00MThjZWIxM2VhNTIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjIxODUzREE5M0ZDMTFFODhGODZFNjg5NkU3MDY3RTYiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjIxODUzRDk5M0ZDMTFFODhGODZFNjg5NkU3MDY3RTYiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTggKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo3MDk5NjllYi1jODg3LTRlZjUtODBkNy1hNTVmYjZlNzJlNzEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NTAzYWE2YjMtM2MxMy00OWMxLTgzYmYtNDE4Y2ViMTNlYTUyIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+xIa0BQAAAulJREFUeNrsll0ou3EUx/esja1p7YblfXkvxMhbLiyilLciyYUUF1bibjdSVkp5KYpL83LBrraYXBhFeblgwi1tIpmQJhRiPvvvfyd3z+72u9jO7/ec3/me7znf8/QIfr9fEsollYR4hQHCAKIBfH5+vry8hArg6OioqKiooKBgYWFBfAQmuaKiYnp62uVyJSYmPjw8+EVdAQYqler+/v729lYul0dGRt7c3AwPD6+urorG4OLiori4OD4+fnNz8/n5OT8/v6WlJTU1dW5ujqdOpxPs36l9f3/Pz8/b7fbd3V232/0XA0nwz2QylZWV0ee9vT2dTsfJxMREbW0tRmVlJcC/bx4eHlJSh8PR1NS0uLj4F4CMRLq6us7OzpKTkwsLC2NjY7++vqqrq8/Pz8fHx6GoVCplMtlv6nSrvLy8rq4OotT2rwrJdnZ29vf3T09PFQpFb2/v9fU19vr6ekZGBtIK6EwqjYiIsFgsbD8+PjCysrLS0tI8Hg/yW1tbU/5bVqsVQtHR0VNTU+np6Vqttq2tTRAE6fv7O/hEJ5ZarSZZjUaTlJSERzAFog8MDBwcHGB0dnaWlJScnJyMjY0hDW5FRUXxSz1XVlZg397enpubS8+48p8CSTU0NFRVVRmNRqrE/ZycHGYCe2NjgyI2NjbiBlGaWVNTw8nl5WVzc/P29nZrayvbjo4OHJaXl+EES05eX18NBgOlDsiU9G02G6TIkRAjIyM+n4+ZAA+ywQxGR0f7+vqenp6o++zs7NDQEAbneOKA8MxmMw07Pj6GJSM1ODhIqcHDQQCEIYAaYoVmQkICckI/W1tb3d3d/f39HJIOkGQUExNDDzIzM1NSUrKzs6lVfX09bdDr9V6v9+rqivrMzMzwNC4ujjjUPAAAU5qTl5c3OTlJIERNFmx7enrEGbTS0tKlpSVIAXt3dyfuq0ISnFV6wHyhDb/YSwh+tjw+Pr69vSFk0V+mQvi7KAwQBpD8CDAA2IvHzRelAL0AAAAASUVORK5CYII=",
-  "icon_large": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAIAAAABc2X6AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQwIDc5LjE2MDQ1MSwgMjAxNy8wNS8wNi0wMTowODoyMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1MDNhYTZiMy0zYzEzLTQ5YzEtODNiZi00MThjZWIxM2VhNTIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjIxODUzRDY5M0ZDMTFFODhGODZFNjg5NkU3MDY3RTYiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjIxODUzRDU5M0ZDMTFFODhGODZFNjg5NkU3MDY3RTYiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTggKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo3MDk5NjllYi1jODg3LTRlZjUtODBkNy1hNTVmYjZlNzJlNzEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NTAzYWE2YjMtM2MxMy00OWMxLTgzYmYtNDE4Y2ViMTNlYTUy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",
-  "help_online": null,
-  "vendor_version": null
+  "help_online": "https://github.com/fortinet-fortisoar/connector-kafka/blob/release/1.0.0/docs/KafkaConnectorDoc.md"
 }
