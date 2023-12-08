@@ -34,15 +34,18 @@
       "title": "kafka topic list",
       "description": "Retrieves all topics that are on the Kafka.",
       "enabled": true,
+      "category": "investigation",
+      "annotation": "topic_list",
       "output_schema": {},
-      "parameters": [],
-      "open": false
+      "parameters": []
     },
     {
       "operation": "topic_details",
       "title": "kafka topic details",
       "description": "Get details of topic(s) based on the topic names and other input parameters specified from Kafka",
       "enabled": true,
+      "category": "investigation",
+      "annotation": "topic_details",
       "output_schema": {},
       "parameters": [
         {
@@ -86,13 +89,14 @@
           "editable": true,
           "value": "Specify the seek partition"
         }
-      ],
-      "open": false
+      ]
     },
     {
       "title": "Send String Message to Topic",
       "operation": "send_str_message_to_topic",
       "description": "Publish Message to a Topic in Kafka",
+      "category": "investigation",
+      "annotation": "send_str_message_to_topic",
       "enabled": true,
       "output_schema": {},
       "parameters": [
@@ -116,13 +120,16 @@
           "value": "",
           "description": "Specify the message to send."
         }
-      ],
-      "open": false
+      ]
     },
     {
       "title": "Send b64encoded Message to Topic",
       "operation": "send_b64encoded_message_to_topic",
+      "category": "investigation",
+      "annotation": "send_b64encoded_message_to_topic",
       "description": "Publish Message to a Topic in Kafka The b64encoded message will be decoded to bytes",
+      "enabled": true,
+      "output_schema": {},
       "parameters": [
         {
           "title": "Topic",
@@ -144,8 +151,7 @@
           "value": "",
           "description": "Specify the message to send."
         }
-      ],
-      "open": false
+      ]
     }
   ],
   "category": "Communication and Coordination",

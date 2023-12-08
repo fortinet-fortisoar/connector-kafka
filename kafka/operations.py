@@ -19,7 +19,7 @@ logger = get_logger("kafka")
 DEFAULT_ENCODING_CODEC = "utf-8"
 
 
-class DannyJSONEncoder(json.JSONEncoder):
+class CustomJSONEncoder(json.JSONEncoder):
     global DEFAULT_ENCODING_CODEC
 
     def default(self, obj):
