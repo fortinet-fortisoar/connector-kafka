@@ -82,7 +82,7 @@
           "title": "Seek Partition",
           "type": "object",
           "name": "seek_partition",
-          "tooltip": "Specify the seek partition.",
+          "description": "Specify the seek partition.",
           "required": false,
           "visible": true,
           "editable": true,
