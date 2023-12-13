@@ -31,7 +31,7 @@
   "operations": [
     {
       "operation": "topic_list",
-      "title": "kafka topic list",
+      "title": "Kafka Topic List",
       "description": "Retrieves all topics that are on the Kafka.",
       "enabled": true,
       "category": "investigation",
@@ -41,7 +41,7 @@
     },
     {
       "operation": "topic_details",
-      "title": "kafka topic details",
+      "title": "Kafka Topic Details",
       "description": "Get details of topic(s) based on the topic names and other input parameters specified from Kafka",
       "enabled": true,
       "category": "investigation",
@@ -55,8 +55,7 @@
           "required": true,
           "visible": true,
           "editable": true,
-          "value": "",
-          "tooltip": "sample input: \n[\"topic1\", \"my-topic\"]",
+          "value": "sample input: \n[\"topic1\", \"my-topic\"]",
           "description": "Specify the topic names whose details you want to fetch."
         },
         {
@@ -83,11 +82,11 @@
           "title": "Seek Partition",
           "type": "object",
           "name": "seek_partition",
-          "tooltip": "sample input value: \n[\n\t{\n\t\t\"partition\": 1,\n\t\t\"offset\": 1,\n\t}\n]",
+          "tooltip": "Specify the seek partition.",
           "required": false,
           "visible": true,
           "editable": true,
-          "value": "Specify the seek partition"
+          "value": "sample input value: \n[\n\t{\n\t\t\"partition\": 1,\n\t\t\"offset\": 1,\n\t}\n]"
         }
       ]
     },

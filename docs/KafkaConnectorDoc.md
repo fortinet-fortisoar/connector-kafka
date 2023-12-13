@@ -33,30 +33,24 @@ For the procedure to configure a connector, click [here](https://docs.fortinet.c
 
 ## Actions supported by the connector
 The following automated operations can be included in playbooks and you can also use the annotations to access operations:
-<table border=1><thead><tr><th>Function</th><th>Description</th><th>Annotation and Category</th></tr></thead><tbody><tr><td>kafka topic list</td><td>Retrieves all topics that are on the Kafka.</td><td>topic_list <br/>Investigation</td></tr>
-<tr><td>kafka topic details</td><td>Get details of topic(s) based on the topic names and other input parameters specified from Kafka</td><td>topic_details <br/>Investigation</td></tr>
+<table border=1><thead><tr><th>Function</th><th>Description</th><th>Annotation and Category</th></tr></thead><tbody><tr><td>Kafka Topic List</td><td>Retrieves all topics that are on the Kafka.</td><td>topic_list <br/>Investigation</td></tr>
+<tr><td>Kafka Topic Details</td><td>Get details of topic(s) based on the topic names and other input parameters specified from Kafka</td><td>topic_details <br/>Investigation</td></tr>
 <tr><td>Send String Message to Topic</td><td>Publish Message to a Topic in Kafka</td><td>send_str_message_to_topic <br/>Investigation</td></tr>
 <tr><td>Send b64encoded Message to Topic</td><td>Publish Message to a Topic in Kafka The b64encoded message will be decoded to bytes</td><td>send_b64encoded_message_to_topic <br/>Investigation</td></tr>
 </tbody></table>
 
-### operation: kafka topic list
+### operation: Kafka Topic List
 #### Input parameters
 None.
 #### Output
 
  The output contains a non-dictionary value.
-### operation: kafka topic details
+### operation: Kafka Topic Details
 #### Input parameters
 <table border=1><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td>Topic Names</td><td>Specify the topic names whose details you want to fetch.
 </td></tr><tr><td>Poll Timeout in ms</td><td>Specify the Poll Timeout in ms
 </td></tr><tr><td>Max Records</td><td>Specify the maximum records to fetch.
-</td></tr><tr><td>Seek Partition</td><td>sample input value: 
-[
-	{
-		"partition": 1,
-		"offset": 1,
-	}
-]
+</td></tr><tr><td>Seek Partition</td><td>Specify the seek partition.
 </td></tr></tbody></table>
 
 #### Output
@@ -85,7 +79,7 @@ The `Sample - kafka - 1.0.0` playbook collection comes bundled with the Kafka co
 
 - Send String Message to Topic
 - Send b64encoded Message to Topic
-- kafka topic details
-- kafka topic list
+- Kafka Topic Details
+- Kafka Topic List
 
 **Note**: If you are planning to use any of the sample playbooks in your environment, ensure that you clone those playbooks and move them to a different collection since the sample playbook collection gets deleted during connector upgrade and delete.
