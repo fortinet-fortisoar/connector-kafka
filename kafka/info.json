@@ -55,7 +55,7 @@
           "required": true,
           "visible": true,
           "editable": true,
-          "value": "sample input: \n[\"topic1\", \"my-topic\"]",
+          "tooltip": "sample input: [\"topic1\", \"my-topic\"]",
           "description": "Specify the topic names whose details you want to fetch."
         },
         {
@@ -86,7 +86,7 @@
           "required": false,
           "visible": true,
           "editable": true,
-          "value": "sample input value: \n[\n\t{\n\t\t\"partition\": 1,\n\t\t\"offset\": 1,\n\t}\n]"
+          "tooltip": "sample input value: [{\"partition\": 1,\"offset\": 1}]"
         }
       ]
     },

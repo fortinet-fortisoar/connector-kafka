@@ -145,10 +145,10 @@
                 "name": "Kafka",
                 "config": "''",
                 "params": {
-                  "topics": "sample input: \n[\"topic1\", \"my-topic\"]",
+                  "topics": ["topic1", "my-topic"],
                   "timeout_ms": 1000,
                   "max_records": "",
-                  "seek_partition": "sample input value: \n[\n\t{\n\t\t\"partition\": 1,\n\t\t\"offset\": 1,\n\t}\n]"
+                  "seek_partition": [{"partition": 1,"offset": 1}]
                 },
                 "version": "1.0.0",
                 "connector": "kafka",
